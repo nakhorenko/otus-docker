@@ -32,7 +32,24 @@ Successfully tagged otus-docker:latest
 CONTAINER ID   IMAGE         COMMAND                  CREATED         STATUS         PORTS                               NAMES
 8b06ecb67464   otus-docker   "/docker-entrypoint.…"   3 seconds ago   Up 2 seconds   0.0.0.0:99->80/tcp, :::99->80/tcp   otus
 ```
-Страницы доступны на localhost:99 (nginx) и localhost:80 (apache2)
+Страницы доступны на localhost:99 и localhost:80
 
 Доп задание:
 
+Из файла docker-compose.yml создаем image и запускаем 2 контейнера, один с базой постгри, второй с редмайном
+
+```
+~/Linux2022-12/otus-docker$ docker-compose up -d
+Starting otus-docker_redmine_1 ... 
+Starting otus-docker_redmine_1 ... done
+```
+У меня возникли проблемы с 80м портом при старте контейнера redmine т.к. на рабочем ноуте был запущен сервис apache, я его стопнул и всё запустилось.
+``
+Starting otus-docker_redmine_1 ... 
+otus-docker_postgres_1 is up-to-date
+Starting otus-docker_redmine_1 ... error
+
+ERROR: for otus-docker_redmine_1  Cannot start service redmine: driver failed programming external connectivity on endpoint otus-docker_redmine_1 (21a56e900309fbe17531b3057878e996600d67a78ef06fa259d9b9b0dc4e8a6e): Error starting userland proxy: listen tcp4 0.0.0.0:80: bind: address already in use
+
+ERROR: for redmine  Cannot start service redmine: driver failed programming external connectivity on endpoint otus-docker_redmine_1 (21a56e900309fbe17531b3057878e996600d67a78ef06fa259d9b9b0dc4e8a6e): Error starting userland proxy: listen tcp4 0.0.0.0:80: bind: address already in use
+```
