@@ -1,12 +1,28 @@
-version: '1.29.2'
-  services:
-    redmine:
+version: '3.3'
+services:
+  postgres:
+    image: postgres:10
+    volumes:
+      - ./storage/postgresql-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: "postgres123"
+      POSTGRES_DB: "redmine"
+      PGDATA: "/var/lib/postgresql/data"
+    restart: always
+  redmine:
     build:
       context: .
-    image: redimne:custom
+    image: redmine:custom
     ports:
       - 80:3000
     volumes:
       - ./storage/docker_redmine-plugins:/usr/src/redmine/plugins
       - ./storage/docker_redmine-themes:/usr/src/redmine/public/themes
       - ./storage/docker_redmine-data:/usr/src/redmine/data
+    environment:
+      REDMINE_DB_POSTGRES: "postgres"
+      REDMINE_DB_USERNAME: "postgres"
+      REDMINE_DB_PASSWORD: "postgres123"
+      REDMINE_DB_DATABASE: "redmine"
+    restart: always
+
