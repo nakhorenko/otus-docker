@@ -44,7 +44,8 @@ Starting otus-docker_redmine_1 ...
 Starting otus-docker_redmine_1 ... done
 ```
 У меня возникли проблемы с 80м портом при старте контейнера redmine т.к. на рабочем ноуте был запущен сервис apache, я его стопнул и всё запустилось.
-``
+
+```
 Starting otus-docker_redmine_1 ... 
 otus-docker_postgres_1 is up-to-date
 Starting otus-docker_redmine_1 ... error
@@ -53,3 +54,31 @@ ERROR: for otus-docker_redmine_1  Cannot start service redmine: driver failed pr
 
 ERROR: for redmine  Cannot start service redmine: driver failed programming external connectivity on endpoint otus-docker_redmine_1 (21a56e900309fbe17531b3057878e996600d67a78ef06fa259d9b9b0dc4e8a6e): Error starting userland proxy: listen tcp4 0.0.0.0:80: bind: address already in use
 ```
+Далее находим подходящую тему и скачиваем её при помощи wget
+Копируем в директорию /storage
+```
+~/Linux2022-12/otus-docker/storage/docker_redmine-themes$ ll
+итого 160
+drwxr-xr-x 2 root root   4096 мар 14 13:56 ./
+drwxr-xr-x 6 root root   4096 мар 14 12:27 ../
+-rw-r--r-- 1 root root 153700 мар 14 13:56 application.css
+```
+Она появляется в указанной директории в контейнере
+```
+root@5df7f788bf93:/usr/src/redmine/public/themes# ls -la
+total 160
+drwxr-xr-x 2 root root   4096 Mar 14 12:56 .
+drwxr-xr-x 3 root root   4096 Mar 14 11:27 ..
+-rw-r--r-- 1 root root 153700 Mar 14 12:56 application.css
+```
+Дальше 
+```
+~/Linux2022-12/otus-docker$ docker ps
+CONTAINER ID   IMAGE            COMMAND                  CREATED       STATUS       PORTS                                           NAMES
+9e86a101cf4c   postgres:10      "docker-entrypoint.s…"   2 hours ago   Up 2 hours   5432/tcp                                        otus-docker_postgres_1
+5df7f788bf93   redmine:custom   "/docker-entrypoint.…"   2 hours ago   Up 2 hours   80/tcp, 0.0.0.0:80->3000/tcp, :::80->3000/tcp   otus-docker_redmine_1
+
+~/Linux2022-12/otus-docker$ docker restart 5df7f788bf93
+5df7f788bf93
+```
+Идём в Administration -> Settings -> Display и выбираем новую тему.
